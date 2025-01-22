@@ -1,0 +1,63 @@
+from django.conf import settings
+from django.db import models
+from django.db.models import Model
+
+from scambaiting.validators import no_spaces
+
+
+# Create your models here.
+class Thread(Model):
+    title = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.title
+
+
+class Image(Model):
+    image = models.ImageField(upload_to=settings.MEDIA_ROOT)
+    name = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        if self.name:
+            return self.name
+        return self.id
+
+
+class Person(Model):
+    name = models.CharField(max_length=200)
+    display_image = models.ForeignKey(Image, blank=True, null=True, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Email(Model):
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+    recipient = models.ForeignKey(Person, on_delete=models.PROTECT, related_name="recipient")
+    sender = models.ForeignKey(Person, on_delete=models.PROTECT, related_name="sender")
+    subject = models.CharField(max_length=200)
+    body = models.TextField()
+    entry = models.PositiveSmallIntegerField()
+    initial_comment = models.TextField(null=True, blank=True)
+    final_comment = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Email from {self.sender} to {self.recipient} at {self.timestamp}"
+
+    class Meta:
+        constraints = [ models.UniqueConstraint(fields=["thread","entry"], name="unique entry for thread") ]
+        
+
+class ImageAttachment(Model):
+    email = models.ForeignKey(Email, on_delete=models.CASCADE)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT)
+
+
+class FAQ(Model):
+    question = models.TextField()
+    answer = models.TextField()
+    short_id = models.CharField(max_length=50, unique=True, validators=[no_spaces])
+
+    def __str__(self):
+        return f"FAQ:{self.short_id}: {self.question}"
