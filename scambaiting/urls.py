@@ -4,5 +4,7 @@ from scambaiting import views
 urlpatterns = [
     path('faqs/', views.faqs),
     path('threads/', views.thread_list),
-    path('threads/<int:thread_id>', views.thread_detail)
+    path('threads/<int:thread_id>', views.thread_detail),
+    path('inboxes/', views.inboxes),
+    path('inbox/<int:person_id>', views.inbox)
 ]

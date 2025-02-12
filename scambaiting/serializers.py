@@ -1,21 +1,18 @@
 from rest_framework import serializers
 
-from scambaiting.models import Thread
-
-class ThreadSerializer(serializers.Serializer):
-    pk = serializers.IntegerField()
-    title = serializers.CharField()
-
-    def create(self, validated_data):
-        return Thread.objects.create(**validated_data)
 
 class ImageSerializer(serializers.Serializer):
     image = serializers.ImageField()
     name = serializers.CharField(required=False)
 
 class PersonSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
     name = serializers.CharField()
     display_image = ImageSerializer(required=False)
+
+class ThreadSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    title = serializers.CharField()
 
 class ImageAttachmentSerializer(serializers.Serializer):
     image = ImageSerializer()

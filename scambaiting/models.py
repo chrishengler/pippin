@@ -5,14 +5,6 @@ from django.db.models import Model
 from scambaiting.validators import no_spaces
 
 
-# Create your models here.
-class Thread(Model):
-    title = models.CharField(max_length=200)
-    
-    def __str__(self):
-        return self.title
-
-
 class Image(Model):
     image = models.ImageField(upload_to=settings.MEDIA_ROOT)
     name = models.CharField(max_length=100, blank=True)
@@ -26,9 +18,17 @@ class Image(Model):
 class Person(Model):
     name = models.CharField(max_length=200)
     display_image = models.ForeignKey(Image, blank=True, null=True, on_delete=models.PROTECT)
+    has_inbox = models.BooleanField()
 
     def __str__(self):
         return f"{self.name}"
+
+
+class Thread(Model):
+    title = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.title
 
 
 class Email(Model):
@@ -39,8 +39,6 @@ class Email(Model):
     subject = models.CharField(max_length=200)
     body = models.TextField()
     entry = models.PositiveSmallIntegerField()
-    initial_comment = models.TextField(null=True, blank=True)
-    final_comment = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"Email from {self.sender} to {self.recipient} at {self.timestamp}"

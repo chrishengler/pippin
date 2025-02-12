@@ -2,11 +2,32 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from scambaiting.models import FAQ, Thread
-from scambaiting.serializers import FAQSerializer, ThreadSerializer, ThreadDetailSerializer
+from scambaiting.models import FAQ, Person, Thread
+from scambaiting.serializers import FAQSerializer, PersonSerializer, ThreadSerializer, ThreadDetailSerializer
 
 
 # Create your views here.
+@api_view(['GET'])
+def inboxes(request):
+    """
+    List all people with inboxes
+    """
+    if request.method == 'GET':
+        inbox_havers = Person.objects.filter(has_inbox=True)
+        serializer = PersonSerializer(inbox_havers, many=True, context={'request': request})
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def inbox(request, person_id):
+    """
+    List all threads containing emails from a given person
+    """
+    if request.method == 'GET':
+        threads = Thread.objects.filter(email__sender__pk=person_id)
+        serializer = ThreadSerializer(threads, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['GET'])
 def thread_list(request):
     """
