@@ -19,6 +19,7 @@ class Person(Model):
     name = models.CharField(max_length=200)
     display_image = models.ForeignKey(Image, blank=True, null=True, on_delete=models.PROTECT)
     has_inbox = models.BooleanField()
+    bio = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -39,6 +40,7 @@ class Email(Model):
     subject = models.CharField(max_length=200)
     body = models.TextField()
     entry = models.PositiveSmallIntegerField()
+    cc = models.ManyToManyField(Person)
 
     def __str__(self):
         return f"Email from {self.sender} to {self.recipient} at {self.timestamp}"

@@ -21,6 +21,7 @@ class EmailSerializer(serializers.Serializer):
     timestamp = serializers.DateTimeField()
     recipient = PersonSerializer()
     sender = PersonSerializer()
+    cc = PersonSerializer(many=True)
     subject = serializers.CharField()
     body = serializers.CharField()
     initial_comment = serializers.CharField(required=False)
