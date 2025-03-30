@@ -1,4 +1,5 @@
 import environ
+import os
 
 env = environ.Env()
 # reading .env file
@@ -140,5 +141,5 @@ STATIC_URL = env("STATIC_URL")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = env("MEDIA_ROOT")
+MEDIA_ROOT = os.path.join(BASE_DIR, env("MEDIA_ROOT"))
 MEDIA_URL = env("MEDIA_URL", default="")

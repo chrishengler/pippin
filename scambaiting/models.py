@@ -6,7 +6,7 @@ from scambaiting.validators import no_spaces
 
 
 class Image(Model):
-    image = models.ImageField(upload_to=settings.MEDIA_ROOT)
+    image = models.ImageField(upload_to='images')
     name = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
