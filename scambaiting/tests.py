@@ -52,6 +52,7 @@ class ViewTests(TestCase):
         thread = Thread.objects.create(title=self.faker.sentence(), published=True)
         self.create_email(self.baiter, self.scammer, thread, timestamp=datetime.now(timezone.utc)-timedelta(hours=1))
         self.create_email(self.scammer, self.baiter, thread)
+        earliest_email = self.create_email(self.baiter, self.scammer, thread, timestamp=datetime.now(timezone.utc)-timedelta(hours=3))
         
         response = self.c.get(reverse('thread_detail', args=[thread.pk]))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -60,7 +61,9 @@ class ViewTests(TestCase):
         self.assertEqual(data['title'], thread.title)
         emails = data['emails']
         self.assertEqual(emails[0]['sender']['pk'], self.baiter.pk)
-        self.assertEqual(emails[1]['sender']['pk'], self.scammer.pk)
+        self.assertEqual(datetime.fromisoformat(emails[0]['timestamp']), earliest_email.timestamp)
+        self.assertEqual(emails[1]['sender']['pk'], self.baiter.pk)
+        self.assertEqual(emails[2]['sender']['pk'], self.scammer.pk )
 
     def test_unpublished_thread_detail(self):
         thread = Thread.objects.create(title=self.faker.sentence(), published=False)

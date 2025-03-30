@@ -31,7 +31,10 @@ class EmailSerializer(serializers.Serializer):
 
 class ThreadDetailSerializer(serializers.Serializer):
     title = serializers.CharField()
-    emails = EmailSerializer(many=True, source="email_set")
+    emails = serializers.SerializerMethodField()
+
+    def get_emails(self, thread):
+        return EmailSerializer(thread.email_set.order_by('timestamp'), many=True).data
 
 class FAQSerializer(serializers.Serializer):
     short_id = serializers.CharField()

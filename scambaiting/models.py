@@ -41,10 +41,13 @@ class Email(Model):
     sender = models.ForeignKey(Person, on_delete=models.PROTECT, related_name="sender")
     subject = models.CharField(max_length=200, blank=True, null=True)
     body = models.TextField()
-    cc = models.ManyToManyField(Person, blank=True)
+    cc = models.ManyToManyField(Person, blank=True, null=True)
 
     def __str__(self):
         return f"Email from {self.sender} to {self.recipient} at {self.timestamp}"
+
+    class Meta:
+        ordering = ['timestamp']
 
 
 class ImageAttachment(Model):
