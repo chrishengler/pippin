@@ -172,3 +172,4 @@ cython_debug/
 pippin/scambait/.env
 uploads
 pippin/.env
+static
