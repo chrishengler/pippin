@@ -9,6 +9,7 @@ class PersonSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
     name = serializers.CharField()
     display_image = ImageSerializer(required=False)
+    email_address = serializers.CharField(required=False)
 
 class ThreadSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
@@ -27,7 +28,6 @@ class EmailSerializer(serializers.Serializer):
     initial_comment = serializers.CharField(required=False)
     final_comment = serializers.CharField(required=False)
     image_attachments = ImageAttachmentSerializer(many=True, required=False, source='imageattachment_set')
-    entry = serializers.IntegerField()
 
 class ThreadDetailSerializer(serializers.Serializer):
     title = serializers.CharField()
