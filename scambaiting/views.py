@@ -23,7 +23,7 @@ def inbox(request, person_id):
     List all threads containing emails from a given person
     """
     if request.method == 'GET':
-        threads = Thread.objects.filter(email__sender__pk=person_id, published=True)
+        threads = Thread.objects.filter(email__sender__pk=person_id, published=True).distinct()
         serializer = ThreadSerializer(threads, many=True)
         return Response(serializer.data)
 
