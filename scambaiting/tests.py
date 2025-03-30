@@ -37,6 +37,7 @@ class ViewTests(TestCase):
         published_thread = Thread.objects.create(title=self.faker.sentence(), published=True)
         self.create_email(self.baiter, self.scammer, published_thread)
         self.create_email(self.scammer, self.baiter, published_thread)
+        self.create_email(self.baiter, self.scammer, published_thread)
 
         unpublished_thread = Thread.objects.create(title=self.faker.sentence(), published=False)
         self.create_email(self.baiter, self.scammer, unpublished_thread)
