@@ -33,6 +33,7 @@ SECRET_KEY = env("SECRET_KEY", default="insecure")
 DEBUG = True
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS").split()
+CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split()
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS").split()
 
 
