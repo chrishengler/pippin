@@ -23,7 +23,7 @@ def inbox(request, person_id):
     List all threads containing emails from a given person
     """
     if request.method == 'GET':
-        threads = Thread.objects.filter(email__sender__pk=person_id)
+        threads = Thread.objects.filter(email__sender__pk=person_id, published=True)
         serializer = ThreadSerializer(threads, many=True)
         return Response(serializer.data)
 
@@ -34,7 +34,7 @@ def thread_list(request):
     List all threads
     """
     if request.method == 'GET':
-        threads = Thread.objects.all()
+        threads = Thread.objects.filter(published=True)
         serializer = ThreadSerializer(threads, many=True)
         return Response(serializer.data)
 
@@ -45,7 +45,7 @@ def thread_detail(request, thread_id):
     List all emails from a thread
     """
     if request.method == 'GET':
-        thread = get_object_or_404(Thread,pk=thread_id)
+        thread = get_object_or_404(Thread,pk=thread_id, published=True)
         serializer = ThreadDetailSerializer(thread, context={'request': request})
         return Response(serializer.data)
 

@@ -7,7 +7,7 @@ from scambaiting.validators import no_spaces
 
 class Image(Model):
     image = models.ImageField(upload_to=settings.MEDIA_ROOT)
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         if self.name:
@@ -18,8 +18,9 @@ class Image(Model):
 class Person(Model):
     name = models.CharField(max_length=200)
     display_image = models.ForeignKey(Image, blank=True, null=True, on_delete=models.PROTECT)
-    has_inbox = models.BooleanField()
+    has_inbox = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)
+    email_address = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -27,6 +28,7 @@ class Person(Model):
 
 class Thread(Model):
     title = models.CharField(max_length=200)
+    published = models.BooleanField(default=False)
     
     def __str__(self):
         return self.title
@@ -39,15 +41,11 @@ class Email(Model):
     sender = models.ForeignKey(Person, on_delete=models.PROTECT, related_name="sender")
     subject = models.CharField(max_length=200)
     body = models.TextField()
-    entry = models.PositiveSmallIntegerField()
     cc = models.ManyToManyField(Person)
 
     def __str__(self):
         return f"Email from {self.sender} to {self.recipient} at {self.timestamp}"
 
-    class Meta:
-        constraints = [ models.UniqueConstraint(fields=["thread","entry"], name="unique entry for thread") ]
-        
 
 class ImageAttachment(Model):
     email = models.ForeignKey(Email, on_delete=models.CASCADE)
