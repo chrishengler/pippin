@@ -10,6 +10,7 @@ class PersonSerializer(serializers.Serializer):
     name = serializers.CharField()
     display_image = ImageSerializer(required=False)
     email_address = serializers.CharField(required=False)
+    baiter = serializers.BooleanField()
 
 class ThreadSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
