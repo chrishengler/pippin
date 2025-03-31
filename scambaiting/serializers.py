@@ -15,6 +15,8 @@ class PersonSerializer(serializers.Serializer):
 class ThreadSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
     title = serializers.CharField()
+    correspondents = PersonSerializer(many=True)
+    count = serializers.IntegerField(source='email_set.count')
 
 class ImageAttachmentSerializer(serializers.Serializer):
     image = ImageSerializer()
